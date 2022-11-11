@@ -1,4 +1,6 @@
+#Bibliotecas
 import pygame
+#Inicializar o Pygame
 pygame.init()
 
 # Constante de Largura e Altura
