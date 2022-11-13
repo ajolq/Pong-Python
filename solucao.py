@@ -22,6 +22,19 @@ RAQUETE_LARGURA, RAQUETE_ALTURA = 20, 100
 # Titulo da Janela
 pygame.display.set_caption("Jogo para estudo - Pong")
 
+class Bola:
+    MAX_VELOCIDADE = 5
+    COR = BRANCO
+    def __init__(self, x, y, raio):
+        self.x = x
+        self.y = y
+        self.raio = raio
+        self.x_velocidade = MAX_VELOCIDADE
+        self.y_velocidade = 0
+    
+    def desenhar(self, janela):
+        pygame.draw.circle(janela, self.COR, (self.x, self.y), self.raio)
+
 class Raquete:
     COR = BRANCO # Constante para cor Branca da raquete
     VELOCIDADE = 4 # Constante para velocidade da raquete
