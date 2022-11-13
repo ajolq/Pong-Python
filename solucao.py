@@ -19,21 +19,28 @@ PRETO = (0, 0, 0)
 # Dimensões da raquete do Jogo
 RAQUETE_LARGURA, RAQUETE_ALTURA = 20, 100
 
+#Raio da bola
+BOLA_RAIO = 7
+
 # Titulo da Janela
 pygame.display.set_caption("Jogo para estudo - Pong")
 
 class Bola:
     MAX_VELOCIDADE = 5
     COR = BRANCO
-    def __init__(self, x, y, raio):
+    def __init__(self, x, y, raio): # Construtor
         self.x = x
         self.y = y
         self.raio = raio
-        self.x_velocidade = MAX_VELOCIDADE
+        self.x_velocidade = self.MAX_VELOCIDADE
         self.y_velocidade = 0
     
-    def desenhar(self, janela):
+    def desenhar(self, janela): # Desenhar a bola
         pygame.draw.circle(janela, self.COR, (self.x, self.y), self.raio)
+
+    def mover(self): # Mover a bola
+        self.x += self.x_velocidade
+        self.y += self.y_velocidade
 
 class Raquete:
     COR = BRANCO # Constante para cor Branca da raquete
@@ -54,7 +61,7 @@ class Raquete:
         else:
             self.y += self.VELOCIDADE #Some sua coord Y com a velocidade
 
-def desenhar(janela, raquetes):
+def desenhar(janela, raquetes, bola):
     janela.fill(PRETO) # Preencher a tela com a cor Preto
 
     # Desenhar as duas raquetes
@@ -66,7 +73,9 @@ def desenhar(janela, raquetes):
         if i % 2 == 1: # Espaçamento entre os retangulos
             continue
         pygame.draw.rect(janela, BRANCO, (LARGURA // 2 - 5, i, 10, ALTURA // 20))
-
+    
+    # Desenhar a bola no jogo
+    bola.desenhar(janela) 
     # Atualizar partes da tela para exibições
     pygame.display.update() #Atualizar
 
@@ -91,10 +100,11 @@ def main():
     # Centralizar a raquete na janela do jogo
     raquete_esquerda = Raquete(10, ALTURA // 2 - RAQUETE_ALTURA // 2, RAQUETE_LARGURA, RAQUETE_ALTURA) 
     raquete_direita = Raquete(LARGURA - 10 - RAQUETE_LARGURA, ALTURA // 2 - RAQUETE_ALTURA // 2, RAQUETE_LARGURA, RAQUETE_ALTURA)
+    bola = Bola(LARGURA // 2, ALTURA // 2, BOLA_RAIO)
 
     while exe: # Executar as funções enquanto o jogo está aberto
         clock.tick(FPS) # Atualizar o FPS do jogo
-        desenhar(JANELA, [raquete_esquerda, raquete_direita]) # Executar a função desenhar as raquetes
+        desenhar(JANELA, [raquete_esquerda, raquete_direita], bola) # Executar a função desenhar as raquetes e a bola
 
         # Gerenciar o evento de sair do jogo
         for evento in pygame.event.get():
@@ -104,8 +114,10 @@ def main():
 
         # Obter o estado de todos os botões do teclado      
         teclas = pygame.key.get_pressed()
-        #Chamar a função para movimentar as raquetes
+        # Chamar a função para movimentar as raquetes
         raquete_movimento(teclas, raquete_esquerda, raquete_direita)
+        # Executar a movimentação da bola
+        bola.mover()
         
     pygame.quit() # O jogo irá fechar se exe = False
 
